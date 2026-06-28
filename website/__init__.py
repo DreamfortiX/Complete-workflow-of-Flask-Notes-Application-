@@ -28,12 +28,13 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return db.session.get(User, int(id))
 
     return app
 
 def create_database(app):
-    if not path.exists('website/' + DB_NAME):
+    db_path = path.join(path.dirname(path.abspath(__file__)), DB_NAME)
+    if not path.exists(db_path):
         with app.app_context():
             db.create_all()
         print('Created Database')
